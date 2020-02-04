@@ -5,7 +5,11 @@ import './App.css';
 class App extends Component {
     constructor(props) {
         super(props);
-        this.state = { apiResponse: "" };
+        this.state = {
+            apiResponse: "",
+            dbResponse: ""
+        };
+
     }
 
     /* Fetches data from API and stores response on apiResponse. */
@@ -15,13 +19,24 @@ class App extends Component {
             .then(res => this.setState({ apiResponse: res }));
     }
 
+    callDB() {
+        fetch("http://localhost:9000/testDB")
+            .then(res => res.text())
+            .then(res => this.setState({ dbResponse: res }))
+            .catch(err => err);
+    }
+
+
     componentDidMount() {
         this.callAPI();
+        this.callDB();
     }
 
     render() {
         return (
             <div className="App">
+                <p className='App-intro'>{this.state.apiResponse}</p>
+                <p className="App-intro">{this.state.dbResponse}</p>
                 <header className="App-header">
                     <img src={logo} className="App-logo" alt="logo" />
                     <p>
@@ -36,7 +51,7 @@ class App extends Component {
                         Learn React
             </a>
                 </header>
-                <p className='App-intro'>{this.state.apiResponse}</p>
+
             </div>
 
         );
